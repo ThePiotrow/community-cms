@@ -1,2 +1,3 @@
 db_data
 /www/Views/node_modules/
+www/.env*
