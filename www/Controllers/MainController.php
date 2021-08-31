@@ -1,21 +1,18 @@
 <?php
 
+
 namespace App\Controller;
 
 use App\Core\Database;
 use App\Core\View;
 
-class Main
+class MainController
 {
     //Method : Action
     public function defaultAction(){
 
         $pseudo = "Prof"; // Depuis la bdd
-
-
-
-
-
+die("uyij");
 
 
     }
@@ -26,7 +23,4 @@ class Main
         //Affiche la vue 404 intégrée dans le template du front
 
     }
-
-
-
 }
