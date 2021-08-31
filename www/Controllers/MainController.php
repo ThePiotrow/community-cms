@@ -1,11 +1,12 @@
 <?php
 
+
 namespace App\Controller;
 
 use App\Core\Database;
 use App\Core\View;
 
-class Main
+class MainController
 {
     //Method : Action
     public function defaultAction()
