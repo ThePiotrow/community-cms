@@ -11,37 +11,45 @@ class View
     private $data = [];
 
 
-    public function __construct($view, $template = "front"){
+    public function __construct($view, $template = "front")
+    {
         $this->setTemplate($template);
         $this->setView($view);
     }
 
-    public function setTemplate($template){
-        if(file_exists("Views/templates/".$template.".tpl.php")){
-            $this->template = "Views/templates/".$template.".tpl.php";
-        }else{
+    public function setTemplate($template)
+    {
+        if (file_exists("Views/templates/" . $template . ".tpl.php")) {
+            $this->template = "Views/templates/" . $template . ".tpl.php";
+        } else {
             die("Le template n'existe pas");
         }
     }
 
-    public function setView($view){
-        if(file_exists("Views/".$view.".view.php")){
-            $this->view = "Views/".$view.".view.php";
-        }else{
+    public function setView($view)
+    {
+        if (file_exists("Views/views/" . $view . ".php")) {
+            $this->view = "Views/views/" . $view . ".php";
+        } else {
             die("La vue n'existe pas");
         }
     }
 
     //$view->assign("pseudo", $pseudo);
-    public function assign($key, $value){
-        $this->data[$key]=$value;
+    public function assign($key, $value)
+    {
+        $this->data[$key] = $value;
     }
 
 
-    public function __destruct(){
+    public function __destruct()
+    {
         // $this->data = ["pseudo" => "Prof"] ------> $pseudo = "Prof";
         extract($this->data);
 
-        include $this->template;
+        if ($this->template)
+            include $this->template;
+        else
+            include $this->view;
     }
 }
