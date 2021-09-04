@@ -8,6 +8,7 @@ class Database
 
 	private $pdo;
 	private $table;
+	private $last_result = [];
 
 	public function __construct()
 	{
@@ -55,5 +56,98 @@ class Database
 		$query->execute($column);
 	}
 
-	public function selectById()
+	//Fonctions CRUD 
+
+	public function createTable($table, $columns)
+	{
+		$sql = "CREATE TABLE IF NOT EXISTS " . DB_PREFIXE . $table . "(" . $columns . ")";
+
+		try {
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->pdo->exec($sql);
+		} catch (\PDOException $e) {
+			$e->getMessage();
+		}
+	}
+
+	public function editTable($table, $columns)
+	{
+		$sql = "ALTER TABLE" . DB_PREFIXE . $table . "(" . $columns . ")";
+
+		try {
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->pdo->exec($sql);
+		} catch (\PDOException $e) {
+			$e->getMessage();
+		}
+	}
+
+	public function selectAll()
+	{
+		$sql = "SELECT * FROM " . $this->table;
+
+		$result = [];
+
+		try {
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$prep = $this->pdo->prepare($sql);
+			$prep->execute();
+			$result = $prep->fetch(\PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			$e->getMessage();
+		}
+		$this->last_result = $result;
+		return $result;
+	}
+
+	public function selectById($id)
+	{
+		$sql = "SELECT * FROM " . $this->table . " WHERE id = :id";
+
+		$result = [];
+
+		try {
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$prep = $this->pdo->prepare($sql);
+			$prep->execute(['id' => $id]);
+			$result = $prep->fetch(\PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			$e->getMessage();
+		}
+		$this->last_result = $result;
+		return $result;
+	}
+
+	public function search($column, $value)
+	{
+		$sql = "SELECT * FROM " . $this->table . " WHERE " . $column . " = :value";
+
+		$result = [];
+
+		try {
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$prep = $this->pdo->prepare($sql);
+			$prep->execute(['value' => $value]);
+			$result = $prep->fetch(\PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			$e->getMessage();
+		}
+		$this->last_result = $result;
+		return $result;
+	}
+
+	public function limit($int)
+	{
+		if (count($this->last_result) > 0) {
+			array_slice($this->last_result, 0, $int);
+		}
+	}
+
+	public function deleteById()
+	{
+	}
+
+	public function deleteAll()
+	{
+	}
 }

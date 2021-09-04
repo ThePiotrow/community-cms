@@ -27,17 +27,17 @@ $a = $route->getAction();
 
 
 //vérification que le fichier du controller existe
-if( file_exists("./Controllers/".$c.".php") ){
+if (file_exists("./Controllers/" . $c . ".php")) {
 
     //include car on vérifie avant l'existance du fichier et surtout
     //le include est plus rapide à executer
-    include "./Controllers/".$c.".php";
+    include "./Controllers/" . $c . ".php";
 
     //Le fichie existe mais est-ce que la classe existe ?
 
 
-    $c = "App\\Controller\\".$c;
-    if( class_exists($c)){
+    $c = "App\\Controller\\" . $c;
+    if (class_exists($c)) {
 
         // $c = UserController
         // Instance de la classe : la classe dépend du fichier routes.yml qui lui dépend  du slug
@@ -45,25 +45,17 @@ if( file_exists("./Controllers/".$c.".php") ){
 
         $cObject = new $c(); // new App\User
         //Est-ce que la méthode existe dans l'objet
-        if(method_exists($cObject, $a)){
+        if (method_exists($cObject, $a)) {
 
             //$a => addAction
             //Appel de la méthode dans l'objet, exemple UserController->addAction();
             $cObject->$a();
-
-        }else{
+        } else {
             die("Error la methode n'existe pas !!!");
         }
-
-    }else{
+    } else {
         die("Error la classe n'existe pas!!!");
     }
-
-
-}else{
+} else {
     die("Error le fichier controller n'existe pas !!!");
 }
-
-
-
-

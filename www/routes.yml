@@ -1,6 +1,6 @@
 /:
   controller: MainController
-  action: default
+  action: home
 
 /404:
   controller: MainController

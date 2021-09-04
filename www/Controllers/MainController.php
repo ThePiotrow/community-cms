@@ -18,6 +18,8 @@ class MainController
     public function homeAction()
     {
         $view = new View('front.home');
+
+        Database::selectAll();
     }
 
     //Method : Action
