@@ -28,15 +28,15 @@ class Article
     {
         $view = new View('front.article');
 
-        $article = new ArticleModel();
+        $Article = new ArticleModel();
 
-        $articles = $article->selectById($id);
+        $articles = $Article->selectById($id);
 
 
         if (!$articles)
             $view->assign('error', 'Article inexistant');
         else {
-            $view->assign('author', $article->getAuthor($id));
+            $view->assign('author', $Article->getAuthor());
             $view->assign('title', $articles['title']);
             $view->assign('thumbnail', $articles['thumbnail']);
             $view->assign('content', $articles['content']);
@@ -47,5 +47,19 @@ class Article
     public function updateArticleAction($id)
     {
         echo 'Fiche utilisateur de ';
+    }
+
+    public function createArticle()
+    {
+        if (isset($_POST)) {
+        }
+    }
+
+    public function updateArticle($id)
+    {
+    }
+
+    public function deleteArticle($id)
+    {
     }
 }

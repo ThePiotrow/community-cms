@@ -44,7 +44,6 @@ class View
 
     public function __destruct()
     {
-        // $this->data = ["pseudo" => "Prof"] ------> $pseudo = "Prof";
         extract($this->data);
 
         if ($this->template)

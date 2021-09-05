@@ -22,7 +22,7 @@
             </a>
         </div>
 
-        <?php if (!empty($user)) : ?>
+        <?php if (!empty($connectedUser)) : ?>
             <div id="user-profile-button" class="flex flex-middle mr-m bg-gray rounded crop">
                 <div class="flex flex-middle flex-self-stretch bg-white pr-m pl-m visible@m">
                     <p><?= $user['firstname'] . " " . mb_strtoupper($user['lastname'][0]) . '.'; ?></p>
@@ -32,9 +32,7 @@
                 </div>
             </div>
             <div id="user-profile-menu" class="card p-0 flex-column crop hidden">
-                <a href="/bo/account">Compte</a>
-                <a href="/bo">BackOffice</a>
-                <a href="/bo/logout">Se déconnecter</a>
+                <a href="/logout">Se déconnecter</a>
             </div>
         <?php endif ?>
 

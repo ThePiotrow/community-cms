@@ -63,14 +63,13 @@ class Article extends Database
         return $this->content;
     }
 
-    public function getAuthor($id)
+    public function getAuthor()
     {
         $author = new Author();
-        $data = $author->selectById($id);
+        $data = $author->selectById($this->id);
 
-        $name = $data['firstname'] . " " . $data['lastname'];
-
-        return $name;
+        if ($data)
+            return $data['firstname'] . " " . $data['lastname'];
     }
 
     public function getComments()

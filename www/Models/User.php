@@ -10,8 +10,8 @@ class User extends Database
     protected $firstname;
     protected $lastname;
     protected $email;
-    protected $thumbnail;
     protected $password;
+    protected $verificationCode;
     protected $status;
 
     public function __construct()
@@ -39,11 +39,6 @@ class User extends Database
         $this->email = $email;
     }
 
-    public function setThumbnail($thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
-    }
-
     public function setPassword($password)
     {
         $this->password = $password;
@@ -61,22 +56,22 @@ class User extends Database
 
     public function getFirstname()
     {
-        return $this->firstname;
+        return ucfirst($this->firstname);
     }
 
     public function getLastname()
     {
-        return $this->lastname;
+        return strtoupper($this->lastname);
+    }
+
+    public function getFullName()
+    {
+        return $this->getFirstname() . " " . $this->getLastname();
     }
 
     public function getEmail()
     {
-        return $this->email;
-    }
-
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
+        return strtolower($this->email);
     }
 
     public function getPassword()
@@ -87,5 +82,127 @@ class User extends Database
     public function getStatus()
     {
         return $this->status;
+    }
+
+    public function setVerificationCode()
+    {
+        $this->verificationCode = md5($this->getFirstname() . $this->getLastname() . $this->getEmail() . uniqid());
+    }
+
+    public function getVerificationCode()
+    {
+        return $this->verificationCode;
+    }
+
+    public function registrerForm()
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "/register",
+                "id" => "register-form",
+                "submit" => "S'inscrire"
+            ],
+            "inputs" => [
+                "firstname" => [
+                    "type" => "text",
+                    "label" => "Prénom",
+                    "class" => "form-input",
+                    "required" => true
+                ],
+                "lastname" => [
+                    "type" => "text",
+                    "label" => "Nom",
+                    "class" => "form-input",
+                    "required" => true
+                ],
+                "email" => [
+                    "type" => "email",
+                    "label" => "Adresse mail",
+                    "class" => "form-input",
+                    "required" => true
+                ],
+                "password" => [
+                    "type" => "password",
+                    "label" => "Mot de passe",
+                    "class" => "form-input",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
+    public function loginForm()
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "/login",
+                "id" => "login-form",
+                "submit" => "Se connecter"
+            ],
+            "inputs" => [
+                "email" => [
+                    "type" => "email",
+                    "label" => "Adresse mail",
+                    "class" => "form-input",
+                    "required" => true
+                ],
+                "password" => [
+                    "type" => "password",
+                    "label" => "Mot de passe",
+                    "class" => "form-input",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
+    public function updateForm($data)
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "update-form",
+                "submit" => "Mettre à jour"
+            ],
+            "inputs" => [
+                "firstname" => [
+                    "type" => "text",
+                    "label" => "Prénom",
+                    "class" => "form-input",
+                    "required" => true,
+                    "value" => $data['firstname']
+                ],
+                "lastname" => [
+                    "type" => "text",
+                    "label" => "Nom",
+                    "class" => "form-input",
+                    "required" => true,
+                    "value" => $data['lastname']
+                ],
+                "email" => [
+                    "type" => "email",
+                    "label" => "Adresse mail",
+                    "class" => "form-input",
+                    "required" => true,
+                    "value" => $data['email']
+                ],
+                "password" => [
+                    "type" => "password",
+                    "label" => "Mot de passe",
+                    "class" => "form-input",
+                    "required" => true,
+                    "value" => $data['password']
+                ],
+                "status" => [
+                    "type" => "checkbox",
+                    "label" => "Activé",
+                    "class" => "form-input",
+                    "value" => $data['status']
+                ]
+            ]
+        ];
     }
 }

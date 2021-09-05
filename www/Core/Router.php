@@ -38,7 +38,7 @@ class Router
     public function match()
     {
         foreach ($this->listOfRoutes as $path => $data) {
-            if ($path == $this->slug) return $path;
+            if ($path == $this->slug) continue;
 
             if (isset($data['param'])) {
                 $replacePath = str_ireplace(":" . $data['param'], "([^/]+)", $path);

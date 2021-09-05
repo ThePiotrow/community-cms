@@ -25,7 +25,9 @@ class FormBuilder
 						class='" . ($configInput["class"] ?? "") . "'
 						id='" . ($configInput["id"] ?? $name) . "'
 						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
-						 ><br>";
+						" . ($configInput["type"] == "checkbox" ? ($configInput["value"] == 1 ? "checked" : "") : "") . "
+						value='" . ($configInput["value"] ?? "") . "'
+						><br>";
 		}
 
 

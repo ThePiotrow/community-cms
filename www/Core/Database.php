@@ -28,29 +28,18 @@ class Database
 	public function save()
 	{
 
-		//INSERT OU UPDATE
-
-		//Array ( [firstname] => Yves [lastname] => SKRZYPCZYK [email] => y.skrzypczyk@gmail.com [pwd] => Test1234 [country] => fr [role] => 0 [status] => 1 [isDeleted] => 0)
-
 		$column = array_diff_key(
 			get_object_vars($this),
 			get_class_vars(get_class())
 		);
 
-
-
 		if (is_null($this->getId())) {
-			//INSERT
-
 
 			$query = $this->pdo->prepare("INSERT INTO " . $this->table . " 
 						(" . implode(',', array_keys($column)) . ") 
 						VALUES 
-						(:" . implode(',:', array_keys($column)) . ") "); //1 
-
+						(:" . implode(',:', array_keys($column)) . ") ");
 		} else {
-			//UPDATE
-
 
 			$column['id'] = $this->getId();
 
@@ -62,8 +51,8 @@ class Database
 
 			$query = trim($query, ',');
 			$query .= " WHERE id = :id";
+			$query = $this->pdo->prepare($query);
 		}
-
 
 		$query->execute($column);
 	}
@@ -172,6 +161,19 @@ class Database
 		} catch (\Exception $e) {
 			echo $e->getMessage();
 			die();
+		}
+	}
+
+	public function import($data)
+	{
+		$columns = array_diff_key(
+			get_object_vars($this),
+			get_class_vars(get_class())
+		);
+
+		foreach ($columns as $key => $value) {
+			$setter = 'set' . ucfirst($key);
+			$this->$setter($data[$key]);
 		}
 	}
 }

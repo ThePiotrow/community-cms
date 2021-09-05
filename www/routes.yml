@@ -25,66 +25,19 @@
   controller: Article
   action: createArticle
 
-/categories:
-  controller: Category
-  action: showCategories
-
-/category/:name:
-  controller: Category
-  action: showRelatedArticles
-  param: name
-
-/category/update/:name:
-  controller: Category
-  action: updateCategory
-  param: name
-
-/category/delete/:name:
-  controller: Category
-  action: deleteCategory
-  param: name
-
-/category/create:
-  controller: Category
-  action: createCategory
-  param: name
-
-/events:
-  controller: Event
-  action: showEvents
-
-/event/update/:id:
-  controller: Event
-  action: updateEvent
-  param: id
-
-/event/delete/:id:
-  controller: Event
-  action: deleteEvent
-  param: id
-
-/event/create:
-  controller: Event
-  action: createEvent
-  param: id
-
-/settings:
-  controller: Settings
-  action: showSettings
-
 /users:
   controller: User
   action: showUsers
 
 /user/:id:
   controller: User
-  action: showOneUser
-  param: id
-
-/user/update/:id:
-  controller: User
   action: updateUser
   param: id
+
+/user/check/:verificationCode:
+  controller: User
+  action: checkUser
+  param: verificationCode
 
 /user/delete/:id:
   controller: User
