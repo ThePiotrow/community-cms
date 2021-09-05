@@ -158,7 +158,7 @@ class User extends Database
         ];
     }
 
-    public function updateForm($data)
+    public function updateForm($data = [])
     {
         return [
             "config" => [
@@ -173,34 +173,34 @@ class User extends Database
                     "label" => "Prénom",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['firstname']
+                    "value" => $data['firstname'] ?? ""
                 ],
                 "lastname" => [
                     "type" => "text",
                     "label" => "Nom",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['lastname']
+                    "value" => $data['lastname'] ?? ""
                 ],
                 "email" => [
                     "type" => "email",
                     "label" => "Adresse mail",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['email']
+                    "value" => $data['email'] ?? ""
                 ],
                 "password" => [
                     "type" => "password",
                     "label" => "Mot de passe",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['password']
+                    "value" => $data['password'] ?? ""
                 ],
                 "status" => [
                     "type" => "checkbox",
                     "label" => "Activé",
                     "class" => "form-input",
-                    "value" => $data['status']
+                    "value" => $data['status'] ?? ""
                 ]
             ]
         ];

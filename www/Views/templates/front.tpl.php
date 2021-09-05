@@ -17,23 +17,16 @@
 
     <header>
         <div>
-            <a href="/">
-                <h1 id="cms-logo" class="m-0"><?= WEBSITE_NAME; ?></h1>
-            </a>
+            <p><a href="/"> Accueil </a></p>
+            <a href="/users">Liste des utilisateurs</a>&emsp;
+            <a href="/register">S'inscrire</a>&emsp;
+            <a href="/login">Se connecter</a>
         </div>
 
         <?php if (!empty($connectedUser)) : ?>
-            <div id="user-profile-button" class="flex flex-middle mr-m bg-gray rounded crop">
-                <div class="flex flex-middle flex-self-stretch bg-white pr-m pl-m visible@m">
-                    <p><?= $user['firstname'] . " " . mb_strtoupper($user['lastname'][0]) . '.'; ?></p>
-                </div>
-                <div class="flex flex-middle p-s">
-                    <i class="fas fa-user"></i>
-                </div>
-            </div>
-            <div id="user-profile-menu" class="card p-0 flex-column crop hidden">
+            <p>
                 <a href="/logout">Se déconnecter</a>
-            </div>
+            </p>
         <?php endif ?>
 
     </header>

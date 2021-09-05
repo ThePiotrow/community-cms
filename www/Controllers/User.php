@@ -23,9 +23,25 @@ class User
     {
         $view = new View('front.user');
         $User = new UserModel();
+        $error = false;
         $user = $User->selectById($id);
 
-        $error = false;
+        if (!empty($_POST)) {
+            extract($_POST);
+
+            $status = isset($status) ? 1 : 0;
+
+            $User->setId($user['id']);
+            $User->setFirstname($firstname);
+            $User->setLastname($lastname);
+            $User->setEmail($email);
+            $User->setPassword($password);
+            $User->setStatus($status);
+
+            $User->save();
+
+            $user = $User->selectById($id);
+        }
 
         if ($user) {
             $view->assign('user', $user);

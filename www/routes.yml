@@ -2,28 +2,28 @@
   controller: Main
   action: home
 
-/articles:
-  controller: Article
-  action: showArticles
+/pages:
+  controller: Page
+  action: showPages
 
-/article/:id:
-  controller: Article
-  action: showOneArticle
+/page/:id:
+  controller: Page
+  action: showOnePage
   param: id
 
-/article/update/:id:
-  controller: Article
-  action: updateArticle
+/page/update/:id:
+  controller: Page
+  action: updatePage
   param: id
 
-/article/delete/:id:
-  controller: Article
-  action: deleteArticle
+/page/delete/:id:
+  controller: Page
+  action: deletePage
   param: id
 
-/article/create:
-  controller: Article
-  action: createArticle
+/page/create:
+  controller: Page
+  action: createPage
 
 /users:
   controller: User
@@ -44,10 +44,6 @@
   action: deleteUser
   param: id
 
-/user/create:
-  controller: User
-  action: createUser
-
 /login:
   controller: User
   action: showLogin
@@ -59,7 +55,3 @@
 /logout:
   controller: Main
   action: logout
-
-/404:
-  controller: Main
-  action: page404
