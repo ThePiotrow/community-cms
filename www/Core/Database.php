@@ -8,6 +8,7 @@ class Database
 
 	private $pdo;
 	private $table;
+	private $query;
 	private $last_result = [];
 
 	public function __construct()
@@ -49,6 +50,12 @@ class Database
 
 		} else {
 			//UPDATE
+
+
+			$query = $this->pdo->prepare("UPDATE INTO " . $this->table . " 
+						(" . implode(',', array_keys($column)) . ") 
+						VALUES 
+						(:" . implode(',:', array_keys($column)) . ") "); //1 
 
 		}
 
@@ -138,8 +145,8 @@ class Database
 
 	public function limit($int)
 	{
-		if (count($this->last_result) > 0) {
-			array_slice($this->last_result, 0, $int);
+		if (count($this->last_result) < $int) {
+			return array_slice($this->last_result, 0, $int);
 		}
 	}
 

@@ -6,7 +6,7 @@ namespace App\Controller;
 use App\Core\Database;
 use App\Core\View;
 
-class MainController
+class Main
 {
     //Method : Action
     public function defaultAction()

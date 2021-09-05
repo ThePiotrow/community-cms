@@ -5,9 +5,10 @@ namespace App;
 class Autoload
 {
 
-    public static function register(){
+    public static function register()
+    {
 
-        spl_autoload_register(function ($class){
+        spl_autoload_register(function ($class) {
 
             //App\Core\Router -> App/Core/Router
             $class = str_replace("\\", "/", $class);
@@ -18,14 +19,9 @@ class Autoload
             //   /Core/Router.php -> Core/Router.php
             $class = ltrim($class, "/");
 
-            if( file($class)){
+            if (file($class)) {
                 include $class;
             }
-
-
         });
-
     }
-
-
 }
