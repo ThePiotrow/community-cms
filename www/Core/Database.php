@@ -54,7 +54,10 @@ class Database
 			$query = $this->pdo->prepare($query);
 		}
 
-		$query->execute($column);
+		if ($query->execute($column))
+			return 1;
+		else
+			return 0;
 	}
 
 	//Fonctions CRUD 

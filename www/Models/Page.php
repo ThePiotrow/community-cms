@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Core\Database;
 use App\Models\User as Author;
 
-class Article extends Database
+class Page extends Database
 {
     private $id = NULL;
     protected $title;
-    protected $thumbnail;
     protected $content;
     protected $author;
 
@@ -26,11 +25,6 @@ class Article extends Database
     public function setTitle($title)
     {
         $this->title = $title;
-    }
-
-    public function setThumbnail($thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
     }
 
     public function setContent($content)
@@ -53,11 +47,6 @@ class Article extends Database
         return $this->title;
     }
 
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
     public function getContent()
     {
         return $this->content;
@@ -72,17 +61,12 @@ class Article extends Database
             return $data['firstname'] . " " . $data['lastname'];
     }
 
-    public function getComments()
+    public function addPageFrom()
     {
-        $author = new Author();
-        $data = $author->selectById($id);
-
-        $name = $data['firstname'] . " " . $data['lastname'];
-
-        return $name;
+        return [];
     }
 
-    public function addArticleFrom()
+    public function editPageFrom()
     {
         return [];
     }

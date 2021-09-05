@@ -4,16 +4,16 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Core\Helpers;
-use App\Models\Article as ArticleModel;
+use App\Models\Page as PageModel;
 use App\Models\User as UserModel;
 
-class Article
+class Page
 {
-    public function showArticlesAction()
+    public function showPagesAction()
     {
         $view = new View('front.articles');
 
-        $Article = new ArticleModel();
+        $Article = new PageModel();
 
         $articles = $Article->selectAll();
 
@@ -24,7 +24,7 @@ class Article
         $view->assign('articles', $articles);
     }
 
-    public function showOneArticleAction($id)
+    public function showOnePageAction($id)
     {
         $view = new View('front.article');
 
@@ -44,22 +44,18 @@ class Article
         }
     }
 
-    public function updateArticleAction($id)
+    public function updatePageAction($id)
     {
         echo 'Fiche utilisateur de ';
     }
 
-    public function createArticle()
+    public function createPageAction()
     {
         if (isset($_POST)) {
         }
     }
 
-    public function updateArticle($id)
-    {
-    }
-
-    public function deleteArticle($id)
+    public function deletePageAction($id)
     {
     }
 }

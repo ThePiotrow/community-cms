@@ -6,4 +6,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule . /index.php [L]
 
-
+RedirectMatch 403 /\..*$
+RedirectMatch 403 /routes.*$
+Options -Indexes
