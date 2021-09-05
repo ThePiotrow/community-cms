@@ -54,37 +54,37 @@ class User extends Database
         $this->status = $status;
     }
 
-    public function getId($id)
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getFirstname($firstname)
+    public function getFirstname()
     {
         return $this->firstname;
     }
 
-    public function getLastname($lastname)
+    public function getLastname()
     {
         return $this->lastname;
     }
 
-    public function getEmail($email)
+    public function getEmail()
     {
         return $this->email;
     }
 
-    public function getThumbnail($thumbnail)
+    public function getThumbnail()
     {
         return $this->thumbnail;
     }
 
-    public function getPassword($password)
+    public function getPassword()
     {
         return $this->password;
     }
 
-    public function getStatus($status)
+    public function getStatus()
     {
         return $this->status;
     }

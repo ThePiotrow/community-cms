@@ -11,6 +11,20 @@
   action: showOneArticle
   param: id
 
+/article/update/:id:
+  controller: Article
+  action: updateArticle
+  param: id
+
+/article/delete/:id:
+  controller: Article
+  action: deleteArticle
+  param: id
+
+/article/create:
+  controller: Article
+  action: createArticle
+
 /categories:
   controller: Category
   action: showCategories

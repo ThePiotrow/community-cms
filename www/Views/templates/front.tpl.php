@@ -11,12 +11,12 @@
     <script type="module" src="/Views/dist/js/app.js"></script>
 </head>
 
-<body class="flex-column">
+<body>
 
     <?php include 'Views/views/parts/front.header.php' ?>
 
-    <header class="flex flex-between flex-middle bg-soft-white">
-        <div class="p-m">
+    <header>
+        <div>
             <a href="/">
                 <h1 id="cms-logo" class="m-0"><?= WEBSITE_NAME; ?></h1>
             </a>

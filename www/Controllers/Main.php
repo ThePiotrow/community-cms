@@ -3,23 +3,14 @@
 
 namespace App\Controller;
 
-use App\Core\Database;
 use App\Core\View;
 
 class Main
 {
-    //Method : Action
-    public function defaultAction()
-    {
-
-        $pseudo = "Prof"; // Depuis la bdd
-    }
 
     public function homeAction()
     {
         $view = new View('front.home');
-
-        Database::selectAll();
     }
 
     //Method : Action

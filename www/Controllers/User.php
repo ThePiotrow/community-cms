@@ -2,11 +2,17 @@
 
 namespace App\Controller;
 
+use App\Core\View;
+use App\Models\User as UserModel;
+
 class User
 {
     public function showUsersAction()
     {
-        echo 'Affiche tout les utilisateurs';
+        $view = new View('front.user');
+
+        $user = new UserModel();
+        $users = $user->selectAll();
     }
 
     public function showOneUserAction($id)

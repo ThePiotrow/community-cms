@@ -52,11 +52,16 @@ class Database
 			//UPDATE
 
 
-			$query = $this->pdo->prepare("UPDATE INTO " . $this->table . " 
-						(" . implode(',', array_keys($column)) . ") 
-						VALUES 
-						(:" . implode(',:', array_keys($column)) . ") "); //1 
+			$column['id'] = $this->getId();
 
+			$query = "UPDATE " . $this->table . " SET";
+
+			foreach (array_keys($column) as $key) {
+				$query .= " " . $key . " = :" . $key . ",";
+			}
+
+			$query = trim($query, ',');
+			$query .= " WHERE id = :id";
 		}
 
 
@@ -99,7 +104,7 @@ class Database
 			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			$prep = $this->pdo->prepare($sql);
 			$prep->execute();
-			$result = $prep->fetch(\PDO::FETCH_ASSOC);
+			$result = $prep->fetchAll(\PDO::FETCH_ASSOC);
 		} catch (\PDOException $e) {
 			$e->getMessage();
 		}
@@ -156,5 +161,17 @@ class Database
 
 	public function deleteAll()
 	{
+	}
+
+	public function execute($columns = [])
+	{
+		$stmt = $this->pdo->prepare($this->query);
+
+		try {
+			$stmt->execute($columns);
+		} catch (\Exception $e) {
+			echo $e->getMessage();
+			die();
+		}
 	}
 }

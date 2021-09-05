@@ -11,13 +11,8 @@ class Helpers
 		return ucwords(mb_strtolower(trim($firstname)));
 	}
 
-	public static function getUrlParam($param)
+	public static function troncate($string, $length)
 	{
-		$queryString = $_SERVER["QUERY_STRING"];
-		parse_str($queryString, $queryParams);
-
-		if (array_key_exists($param, $queryParams))
-			return $queryParams[$param];
-		return null;
+		return substr($string, 0, $length);
 	}
 }
