@@ -149,6 +149,16 @@ class Database
 
 	public function deleteById()
 	{
+		$sql = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+		try {
+			$prep = $this->pdo->prepare($sql);
+			$prep->execute(['id' => $this->getId()]);
+			return 1;
+		} catch (\PDOException $e) {
+			$e->getMessage();
+		}
+		return 0;
 	}
 
 	public function deleteAll()

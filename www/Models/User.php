@@ -158,6 +158,24 @@ class User extends Database
         ];
     }
 
+    public function deleteForm($id)
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "delete-form",
+                "submit" => "Supprimer le compte"
+            ],
+            "inputs" => [
+                "id" => [
+                    "type" => "hidden",
+                    "value" => $id
+                ]
+            ]
+        ];
+    }
+
     public function updateForm($data = [])
     {
         return [

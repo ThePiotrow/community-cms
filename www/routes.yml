@@ -48,6 +48,10 @@
   controller: User
   action: showLogin
 
+/forgot:
+  controller: User
+  action: showForgot
+
 /register:
   controller: User
   action: showRegister

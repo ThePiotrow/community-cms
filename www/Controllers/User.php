@@ -100,13 +100,9 @@ class User
         }
 
         $form = $User->registrerForm();
-
         $form['csrf'] = uniqid(uniqid());
-
         $_SESSION['csrf'] = $form['csrf'];
-
         $view = new View('front.register');
-
         $User = new UserModel();
 
         $view->assign('form', $User->registrerForm());
@@ -116,22 +112,43 @@ class User
     public function showLoginAction()
     {
         $view = new View('front.login');
-
         $User = new UserModel();
-
         $view->assign('form', $User->loginForm());
+    }
+
+    public function showForgotAction()
+    {
+        $view = new View('front.login');
+        $User = new UserModel();
+        $view->assign('form', $User->loginForm());
+    }
+
+    public function deleteUserAction($id)
+    {
+        $view = new View('front.user-delete');
+        $error = false;
+        $User = new UserModel();
+        $user = $User->selectById($id);
+        $User->setId($user['id']);
+        $User->import($user);
+
+        if (!empty($_POST)) {
+            if ($User->deleteById()) {
+                Helpers::redirect('/users');
+            }
+        }
+
+        $view->assign('error', $error);
+        $view->assign('form', $User->deleteForm($id));
+        $view->assign('fullname', $User->getFullName());
     }
 
     public function checkUserAction($verificationCode)
     {
         $view = new View('front.check');
-
         $User = new UserModel();
-
         $user = $User->search("verificationCode", $verificationCode);
-
         $User->import($user);
-
         $error = false;
 
         if ($user) {

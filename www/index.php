@@ -21,13 +21,13 @@ $p = $route->getParam();
 if (file_exists("./Controllers/" . $c . ".php")) {
 
     include "./Controllers/" . $c . ".php";
-
     $c = "App\\Controller\\" . $c;
+
     if (class_exists($c)) {
 
         $cObject = new $c();
-
         if (method_exists($cObject, $a)) {
+
             empty($p) ? $cObject->$a() : $cObject->$a($p);
         } else {
             die("Error la methode n'existe pas !!!");

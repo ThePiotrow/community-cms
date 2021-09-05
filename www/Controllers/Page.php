@@ -11,36 +11,36 @@ class Page
 {
     public function showPagesAction()
     {
-        $view = new View('front.articles');
+        $view = new View('front.pages');
 
-        $Article = new PageModel();
+        $Page = new PageModel();
 
-        $articles = $Article->selectAll();
+        $pages = $Page->selectAll();
 
-        foreach ($articles as $index => $article) {
-            $articles[$index]['content'] = Helpers::troncate($article['content'], 150);
+        foreach ($pages as $index => $page) {
+            $pages[$index]['content'] = Helpers::troncate($page['content'], 150);
         }
 
-        $view->assign('articles', $articles);
+        $view->assign('pages', $pages);
     }
 
     public function showOnePageAction($id)
     {
-        $view = new View('front.article');
+        $view = new View('front.page');
 
-        $Article = new ArticleModel();
+        $Page = new PageModel();
 
-        $articles = $Article->selectById($id);
+        $pages = $Page->selectById($id);
 
 
-        if (!$articles)
-            $view->assign('error', 'Article inexistant');
+        if (!$pages)
+            $view->assign('error', 'Page inexistante');
         else {
-            $view->assign('author', $Article->getAuthor());
-            $view->assign('title', $articles['title']);
-            $view->assign('thumbnail', $articles['thumbnail']);
-            $view->assign('content', $articles['content']);
-            $view->assign('updatedAt', $articles['updatedAt']);
+            $view->assign('author', $Page->getAuthor());
+            $view->assign('title', $pages['title']);
+            $view->assign('thumbnail', $pages['thumbnail']);
+            $view->assign('content', $pages['content']);
+            $view->assign('updatedAt', $pages['updatedAt']);
         }
     }
 
