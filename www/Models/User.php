@@ -158,6 +158,26 @@ class User extends Database
         ];
     }
 
+    public function forgotForm()
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "/forgot",
+                "id" => "forgot-form",
+                "submit" => "Envoyer un mail de réinitialisation"
+            ],
+            "inputs" => [
+                "email" => [
+                    "type" => "email",
+                    "label" => "Adresse mail",
+                    "class" => "form-input",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     public function deleteForm($id)
     {
         return [

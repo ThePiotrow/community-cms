@@ -1,6 +1,7 @@
 <?php if (isset($error)) {
     echo $error;
-} else ?>
+    die();
+} ?>
 
 <h1><?= $title ?></h1>
 

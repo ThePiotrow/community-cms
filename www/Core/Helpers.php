@@ -22,7 +22,10 @@ class Helpers
 
 	public static function troncate($string, $length)
 	{
-		return substr($string, 0, $length);
+		if (strlen($string) > $length)
+			return substr($string, 0, $length) . " ...";
+		else
+			return $string;
 	}
 
 	public static function redirect($url)

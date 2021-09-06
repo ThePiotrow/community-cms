@@ -10,6 +10,7 @@ class Page extends Database
     private $id = NULL;
     protected $title;
     protected $content;
+    protected $url;
     protected $author;
 
     public function __construct()
@@ -32,6 +33,11 @@ class Page extends Database
         $this->content = $content;
     }
 
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
     public function setAuthor($author)
     {
         $this->author = $author;
@@ -52,6 +58,11 @@ class Page extends Database
         return $this->content;
     }
 
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
     public function getAuthor()
     {
         $author = new Author();
@@ -61,13 +72,72 @@ class Page extends Database
             return $data['firstname'] . " " . $data['lastname'];
     }
 
-    public function addPageFrom()
+    public function addPageForm()
     {
-        return [];
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "page-create-form",
+                "submit" => "Créer la page"
+            ],
+            "inputs" => [
+                "url" => [
+                    "type" => "text",
+                    "label" => "URL de la page",
+                    "class" => "form-input",
+                    "placeholder" => "page-exemple",
+                    "required" => true
+                ],
+                "title" => [
+                    "type" => "text",
+                    "label" => "Titre",
+                    "class" => "form-input",
+                    "required" => true
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "Contenu",
+                    "class" => "form-input",
+                    "required" => true
+                ]
+            ]
+        ];
     }
 
-    public function editPageFrom()
+    public function editPageForm($data = [])
     {
-        return [];
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "page-create-form",
+                "submit" => "Mettre à jour"
+            ],
+            "inputs" => [
+                "url" => [
+                    "type" => "text",
+                    "label" => "URL de la page",
+                    "class" => "form-input",
+                    "placeholder" => "/page-exemple",
+                    "required" => true,
+                    "value" => $data['url'] ?? ""
+                ],
+                "title" => [
+                    "type" => "text",
+                    "label" => "Titre",
+                    "class" => "form-input",
+                    "required" => true,
+                    "value" => $data['title'] ?? ""
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "Contenu",
+                    "class" => "form-input",
+                    "required" => true,
+                    "value" => $data['content'] ?? ""
+                ]
+            ]
+        ];
     }
 }

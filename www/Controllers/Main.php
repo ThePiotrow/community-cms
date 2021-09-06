@@ -10,7 +10,7 @@ class Main
 
     public function homeAction()
     {
-        $view = new View('front.home');
+        $view = new View('home');
     }
 
     //Method : Action

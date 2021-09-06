@@ -11,7 +11,7 @@ class User
 {
     public function showUsersAction()
     {
-        $view = new View('front.users');
+        $view = new View('user/list');
 
         $user = new UserModel();
         $users = $user->selectAll();
@@ -21,7 +21,7 @@ class User
 
     public function updateUserAction($id)
     {
-        $view = new View('front.user');
+        $view = new View('user/profile');
         $User = new UserModel();
         $error = false;
         $user = $User->selectById($id);
@@ -40,7 +40,7 @@ class User
 
             $User->save();
 
-            $user = $User->selectById($id);
+            Helpers::redirect('/users');
         }
 
         if ($user) {
@@ -56,7 +56,6 @@ class User
     {
         session_start();
         $User = new UserModel();
-
         $error = false;
 
         if (!empty($_POST)) {
@@ -86,23 +85,21 @@ class User
                         function () {
                             Helpers::redirect('/');
                         },
-                        function () use (&$userModel, &$id) {
+                        function () use (&$User, &$id) {
                             $error = "L'envoi du mail a échoué. Le compte n'a pas été créé";
-                            $userModel->deleteById($id);
+                            $User->deleteById($id);
                         }
                     );
                 }
             } else {
                 $error = 'Adresse mail déjà utilisée';
             }
-
-            // \App\Core\Helpers::redirect('/');
         }
 
         $form = $User->registrerForm();
         $form['csrf'] = uniqid(uniqid());
         $_SESSION['csrf'] = $form['csrf'];
-        $view = new View('front.register');
+        $view = new View('user/register');
         $User = new UserModel();
 
         $view->assign('form', $User->registrerForm());
@@ -111,21 +108,21 @@ class User
 
     public function showLoginAction()
     {
-        $view = new View('front.login');
+        $view = new View('user/login');
         $User = new UserModel();
         $view->assign('form', $User->loginForm());
     }
 
     public function showForgotAction()
     {
-        $view = new View('front.login');
+        $view = new View('user/forgot');
         $User = new UserModel();
-        $view->assign('form', $User->loginForm());
+        $view->assign('form', $User->forgotForm());
     }
 
     public function deleteUserAction($id)
     {
-        $view = new View('front.user-delete');
+        $view = new View('user/delete');
         $error = false;
         $User = new UserModel();
         $user = $User->selectById($id);
@@ -134,7 +131,7 @@ class User
 
         if (!empty($_POST)) {
             if ($User->deleteById()) {
-                Helpers::redirect('/users');
+                Helpers::redirect('/user/list');
             }
         }
 
@@ -145,7 +142,7 @@ class User
 
     public function checkUserAction($verificationCode)
     {
-        $view = new View('front.check');
+        $view = new View('user/check');
         $User = new UserModel();
         $user = $User->search("verificationCode", $verificationCode);
         $User->import($user);

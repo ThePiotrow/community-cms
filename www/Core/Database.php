@@ -140,13 +140,6 @@ class Database
 		return $result;
 	}
 
-	public function limit($int)
-	{
-		if (count($this->last_result) < $int) {
-			return array_slice($this->last_result, 0, $int);
-		}
-	}
-
 	public function deleteById()
 	{
 		$sql = "DELETE FROM " . $this->table . " WHERE id = :id";

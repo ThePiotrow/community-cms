@@ -6,12 +6,16 @@
   controller: Page
   action: showPages
 
-/page/:id:
+/pages/create:
+  controller: Page
+  action: createPage
+
+/page/:url:
   controller: Page
   action: showOnePage
-  param: id
+  param: url
 
-/page/update/:id:
+/page/edit/:id:
   controller: Page
   action: updatePage
   param: id
@@ -20,10 +24,6 @@
   controller: Page
   action: deletePage
   param: id
-
-/page/create:
-  controller: Page
-  action: createPage
 
 /users:
   controller: User
