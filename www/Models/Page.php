@@ -11,7 +11,6 @@ class Page extends Database
     protected $title;
     protected $content;
     protected $url;
-    protected $author;
 
     public function __construct()
     {
@@ -38,11 +37,6 @@ class Page extends Database
         $this->url = $url;
     }
 
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
     public function getId()
     {
         return $this->id;
@@ -61,15 +55,6 @@ class Page extends Database
     public function getUrl()
     {
         return $this->url;
-    }
-
-    public function getAuthor()
-    {
-        $author = new Author();
-        $data = $author->selectById($this->id);
-
-        if ($data)
-            return $data['firstname'] . " " . $data['lastname'];
     }
 
     public function addPageForm()
@@ -136,6 +121,24 @@ class Page extends Database
                     "class" => "form-input",
                     "required" => true,
                     "value" => $data['content'] ?? ""
+                ]
+            ]
+        ];
+    }
+
+    public function deletePageForm($id)
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "delete-form",
+                "submit" => "Supprimer la page"
+            ],
+            "inputs" => [
+                "id" => [
+                    "type" => "hidden",
+                    "value" => $id
                 ]
             ]
         ];

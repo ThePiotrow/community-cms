@@ -1,4 +1,4 @@
-<?php if (isset($error)) {
+<?php if ($error) {
     echo $error;
     die();
 } ?>

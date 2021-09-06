@@ -10,13 +10,11 @@ class FormValidator
 		$errors = [];
 
 
-		if (count($data) != count($config["inputs"])) {
+		if (count($data) != count($config["inputs"]) + 1) {
 			$errors[] = "Tentative de HACK - Faille XSS";
 		} else {
 
 			foreach ($config["inputs"] as $name => $configInputs) {
-
-				strip_tags($data[$name], ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p']);
 
 				if (
 					!empty($configInputs["minLength"])

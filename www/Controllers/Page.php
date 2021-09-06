@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Core\Helpers;
+use App\Core\FormValidator;
 use App\Models\Page as PageModel;
 use App\Models\User as UserModel;
 
@@ -27,17 +28,17 @@ class Page
     public function showOnePageAction($url)
     {
         $view = new View('page/page');
-
+        $error = false;
         $Page = new PageModel();
-
         $pages = $Page->search('url', $url);
 
         if (!$pages)
-            $view->assign('error', 'Page inexistante');
+            $error = 'Page inexistante';
         else {
             $view->assign('title', $pages['title']);
             $view->assign('content', $pages['content']);
         }
+        $view->assign('error', $error);
     }
 
     public function updatePageAction($id)
@@ -47,27 +48,33 @@ class Page
         $error = false;
         $page = $Page->selectById($id);
 
-        var_dump($page);
-
         if (!empty($_POST)) {
-            extract($_POST);
 
-            $status = isset($status) ? 1 : 0;
+            $inputsError = FormValidator::check($Page->addPageForm(), $_POST);
+            Helpers::convertToGoodData($_POST, Helpers::allowedTags());
 
-            $User->setId($user['id']);
-            $User->setFirstname($firstname);
-            $User->setLastname($lastname);
-            $User->setEmail($email);
-            $User->setPassword($password);
-            $User->setStatus($status);
+            if (!count($inputsError)) {
 
-            $User->save();
+                if (!($Page->search('url', $_POST['url']) && $page['url'] != $_POST['url'])) {
+                    extract($_POST);
 
-            Helpers::redirect('/users');
+                    $Page->setId($page['id']);
+                    $Page->import($_POST);
+
+                    if ($Page->save()) {
+                        Helpers::redirect('/pages');
+                    } else {
+                        $error = "Une erreur est survenue lors de l'enregistrement";
+                    }
+                } else {
+                    $error = 'Cette URL est déjà utilisée';
+                }
+            }
         }
 
         if ($page) {
             $view->assign('form', $Page->editPageForm($page));
+            $view->assign('allowedTags', "Tags HTML autorisé : " . implode(', ', Helpers::allowedTags()));
         } else
             $error = "Aucune information disponible";
 
@@ -78,31 +85,52 @@ class Page
     {
         $view = new View('page/create');
         $Page = new PageModel();
+        $error = false;
 
         if (!empty($_POST)) {
-            $_POST = \App\Core\Helpers::prepareInputs($_POST);
-            \App\Core\FormValidator::check($Page->addPageForm(), $_POST);
 
-            if (!($Page->search('url', $_POST['url']))) {
+            $inputsError = FormValidator::check($Page->addPageForm(), $_POST);
+            Helpers::convertToGoodData($_POST, Helpers::allowedTags());
 
-                $Page->setTitle(html_entity_decode($_POST['title']));
-                $Page->setContent(html_entity_decode($_POST['content']));
-                $Page->setUrl(strtolower($_POST['url']));
-                $Page->setAuthor(1);
+            if (!count($inputsError))
 
-                if ($Page->save()) {
-                    Helpers::redirect('/pages');
+                if (!($Page->search('url', $_POST['url']))) {
+
+                    $Page->import($_POST);
+
+                    if ($Page->save()) {
+                        Helpers::redirect('/pages');
+                    } else {
+                        $error = "Une erreur est survenue lors de l'enregistrement";
+                    }
+                } else {
+                    $error = 'Cette URL est déjà utilisée';
                 }
-            } else {
-                $error = 'Cette URL est déjà utilisée';
-            }
         }
 
         $view->assign('form', $Page->addPageForm());
+        $view->assign('allowedTags', "Tags HTML autorisé : " . implode(', ', Helpers::allowedTags()));
         $view->assign('error', $error);
     }
 
     public function deletePageAction($id)
     {
+        $view = new View('page/delete');
+        $error = false;
+        $Page = new PageModel();
+        $page = $Page->selectById($id);
+        $Page->setId($page['id']);
+        $Page->import($page);
+
+        if (!empty($_POST)) {
+            if ($Page->deleteById()) {
+                Helpers::redirect('/pages');
+            }
+        }
+
+        $view->assign('error', $error);
+        $view->assign('form', $Page->deletePageForm($id));
+        $view->assign('title', $Page->getTitle());
+        $view->assign('url', $Page->getUrl());
     }
 }

@@ -6,6 +6,7 @@ use App\Core\View;
 use App\Models\User as UserModel;
 use App\Core\Mailer;
 use App\Core\Helpers;
+use App\Core\FormValidator;
 
 class User
 {
@@ -35,7 +36,7 @@ class User
             $User->setFirstname($firstname);
             $User->setLastname($lastname);
             $User->setEmail($email);
-            $User->setPassword($password);
+            $User->setPassword(password_hash($password, PASSWORD_BCRYPT));
             $User->setStatus($status);
 
             $User->save();
@@ -60,40 +61,44 @@ class User
 
         if (!empty($_POST)) {
 
-            $_POST = \App\Core\Helpers::prepareInputs($_POST);
+            Helpers::convertToGoodData($_POST);
+            $inputsError = FormValidator::check($User->registrerForm(), $_POST);
 
-            if (!($User->search('email', $_POST['email']))) {
+            if ($inputsError)
+                if (!($User->search('email', $_POST['email']))) {
 
-                $User->setFirstname(ucfirst($_POST['firstname']));
-                $User->setLastname(strtoupper($_POST['lastname']));
-                $User->setEmail(strtolower($_POST['email']));
-                $User->setPassword(password_hash($_POST['password'], PASSWORD_BCRYPT));
-                $User->setStatus(0);
-                $User->setVerificationCode();
+                    extract($_POST);
 
-                if ($User->save()) {
-                    //Send mail
-                    $mail = Mailer::init(
-                        ["address" => "no-reply@community-cms.com", "name" => "Community CMS"],
-                        [["address" => $User->getEmail(), "name" => $User->getFullName()]],
-                        "Vérifiez votre adresse mail",
-                        "<a href='" . HOST_ADDRESS . "/user/check/" . $User->getVerificationCode() . "'>Cliquez ici</a> pour vérifier votre adresse mail"
-                    );
+                    $User->setFirstname(ucfirst($firstname));
+                    $User->setLastname(strtoupper($lastname));
+                    $User->setEmail(strtolower($email));
+                    $User->setPassword(password_hash($password, PASSWORD_BCRYPT));
+                    $User->setStatus(0);
+                    $User->setVerificationCode();
 
-                    Mailer::sendEmail(
-                        $mail,
-                        function () {
-                            Helpers::redirect('/');
-                        },
-                        function () use (&$User, &$id) {
-                            $error = "L'envoi du mail a échoué. Le compte n'a pas été créé";
-                            $User->deleteById($id);
-                        }
-                    );
+                    if ($User->save()) {
+                        //Send mail
+                        $mail = Mailer::init(
+                            ["address" => "no-reply@community-cms.com", "name" => "Community CMS"],
+                            [["address" => $User->getEmail(), "name" => $User->getFullName()]],
+                            "Vérifiez votre adresse mail",
+                            "<a href='" . HOST_ADDRESS . "/user/check/" . $User->getVerificationCode() . "'>Cliquez ici</a> pour vérifier votre adresse mail"
+                        );
+
+                        Mailer::sendEmail(
+                            $mail,
+                            function () {
+                                Helpers::redirect('/');
+                            },
+                            function () use (&$User, &$id) {
+                                $error = "L'envoi du mail a échoué. Le compte n'a pas été créé";
+                                $User->deleteById($id);
+                            }
+                        );
+                    }
+                } else {
+                    $error = 'Adresse mail déjà utilisée';
                 }
-            } else {
-                $error = 'Adresse mail déjà utilisée';
-            }
         }
 
         $form = $User->registrerForm();
@@ -131,7 +136,7 @@ class User
 
         if (!empty($_POST)) {
             if ($User->deleteById()) {
-                Helpers::redirect('/user/list');
+                Helpers::redirect('/users');
             }
         }
 

@@ -1,6 +1,8 @@
-<?php if (isset($error)) {
+<?php if ($error) {
     echo $error;
-} else
-    App\Core\FormBuilder::render($form);
-?>
-<br><a href="/pages">Retour</a>
+    die();
+}
+
+App\Core\FormBuilder::render($form);
+
+echo $allowedTags;
