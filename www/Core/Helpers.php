@@ -34,6 +34,6 @@ class Helpers
 
 	public static function allowedTags()
 	{
-		return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'ul', 'ol', 'li'];
+		return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'ul', 'ol', 'li', 'img'];
 	}
 }

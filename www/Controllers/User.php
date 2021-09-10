@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Core\View;
-use App\Models\User as UserModel;
 use App\Core\Mailer;
 use App\Core\Helpers;
 use App\Core\FormValidator;
+use App\Core\Auth;
+
+use App\Models\User as UserModel;
 
 class User
 {
@@ -36,7 +38,7 @@ class User
             $User->setFirstname($firstname);
             $User->setLastname($lastname);
             $User->setEmail($email);
-            $User->setPassword(password_hash($password, PASSWORD_BCRYPT));
+            $User->setPassword($user['password'] != $password ? password_hash($password, PASSWORD_BCRYPT) : $password);
             $User->setStatus($status);
 
             $User->save();
@@ -85,16 +87,16 @@ class User
                             "<a href='" . HOST_ADDRESS . "/user/check/" . $User->getVerificationCode() . "'>Cliquez ici</a> pour vérifier votre adresse mail"
                         );
 
-                        Mailer::sendEmail(
-                            $mail,
-                            function () {
-                                Helpers::redirect('/');
-                            },
-                            function () use (&$User, &$id) {
-                                $error = "L'envoi du mail a échoué. Le compte n'a pas été créé";
-                                $User->deleteById($id);
-                            }
-                        );
+                        // Mailer::sendEmail(
+                        //     $mail,
+                        //     function () {
+                        //         Helpers::redirect('/');
+                        //     },
+                        //     function () use (&$User, &$id) {
+                        //         $error = "L'envoi du mail a échoué. Le compte n'a pas été créé";
+                        //         $User->deleteById($id);
+                        //     }
+                        // );
                     }
                 } else {
                     $error = 'Adresse mail déjà utilisée';
@@ -115,6 +117,31 @@ class User
     {
         $view = new View('user/login');
         $User = new UserModel();
+        $error = false;
+
+        if (Auth::isAuth())
+            Helpers::redirect('/users');
+
+        if (!empty($_POST)) {
+            extract($_POST);
+            $user = $User->search('email', $email);
+
+            if ($user) {
+                if (password_verify($password, $user['password'])) {
+                    if ($user['status'] == 1) {
+                        Auth::setAuth($user['id']);
+                        Helpers::redirect('/users');
+                    } else {
+                        $error = "Veuillez activer le compte";
+                    }
+                } else {
+                    $error = "Identifiants incorrects";
+                }
+            } else
+                $error = "Aucun compte correspondant";
+        }
+
+        $view->assign('error', $error);
         $view->assign('form', $User->loginForm());
     }
 
@@ -131,13 +158,18 @@ class User
         $error = false;
         $User = new UserModel();
         $user = $User->selectById($id);
-        $User->setId($user['id']);
-        $User->import($user);
 
-        if (!empty($_POST)) {
-            if ($User->deleteById()) {
-                Helpers::redirect('/users');
+        if ($user) {
+            $User->setId($user['id']);
+            $User->import($user);
+
+            if (!empty($_POST)) {
+                if ($User->deleteById()) {
+                    Helpers::redirect('/users');
+                }
             }
+        } else {
+            $error = "Aucun compte correspondant";
         }
 
         $view->assign('error', $error);
@@ -150,10 +182,10 @@ class User
         $view = new View('user/check');
         $User = new UserModel();
         $user = $User->search("verificationCode", $verificationCode);
-        $User->import($user);
         $error = false;
 
         if ($user) {
+            $User->import($user);
             if ($user['status'] == 1) {
                 $error = "Le compte est déjà actif";
             } else {
@@ -166,5 +198,10 @@ class User
         }
 
         $view->assign('error', $error);
+    }
+
+    public function logoutAction()
+    {
+        Auth::endAuth();
     }
 }

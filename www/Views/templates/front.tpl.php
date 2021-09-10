@@ -1,3 +1,9 @@
+<?php
+
+$isConnected = App\Core\Auth::isAuth();
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -14,7 +20,7 @@
         <a href="/users">Liste des utilisateurs</a>&emsp;
         <a href="/pages">Liste des pages</a>&emsp;
         <a href="/register">S'inscrire</a>&emsp;
-        <?php if (!empty($connectedUser)) : ?>
+        <?php if ($isConnected) : ?>
             <a href="/logout">Se déconnecter</a>
         <?php else : ?>
             <a href="/login">Se connecter</a>

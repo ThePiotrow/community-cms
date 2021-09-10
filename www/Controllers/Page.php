@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Core\View;
 use App\Core\Helpers;
 use App\Core\FormValidator;
+
 use App\Models\Page as PageModel;
-use App\Models\User as UserModel;
 
 class Page
 {

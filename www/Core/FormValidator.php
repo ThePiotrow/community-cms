@@ -10,7 +10,7 @@ class FormValidator
 		$errors = [];
 
 
-		if (count($data) != count($config["inputs"]) + 1) {
+		if (count($data) != count($config["inputs"])) {
 			$errors[] = "Tentative de HACK - Faille XSS";
 		} else {
 

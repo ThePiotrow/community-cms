@@ -4,6 +4,7 @@ namespace App;
 
 use App\Core\Router;
 use App\Core\ConstantManager;
+use App\Controller\Auth;
 
 require "Autoload.php";
 Autoload::register();

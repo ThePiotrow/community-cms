@@ -57,5 +57,5 @@
   action: showRegister
 
 /logout:
-  controller: Main
+  controller: User
   action: logout

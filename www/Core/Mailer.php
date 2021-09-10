@@ -16,7 +16,7 @@ class Mailer
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->SMTPAuth = true;
         $mail->Username = 'admin@la11eme.fr';
-        $mail->Password = 'azertyuiop';
+        $mail->Password = 'aqwzsxedc';
 
         $mail->CharSet    = 'UTF-8';
         $mail->Encoding   = 'base64';
@@ -24,12 +24,14 @@ class Mailer
         $mail->setFrom($from['address'], $from['name'] ?? '');
 
         foreach ($to as $receiver) {
-            $mail->addAddress($receiver['address'], $receiver['address'] ?? '');
+            $mail->addAddress($receiver['address'], $receiver['name'] ?? '');
         }
 
         $mail->Subject = $subject;
         $mail->msgHTML($body);
         $mail->AltBody = $altBody;
+
+        $mail->send();
 
         return $mail;
     }
