@@ -16,7 +16,7 @@ class Mailer
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->SMTPAuth = true;
         $mail->Username = 'admin@la11eme.fr';
-        $mail->Password = 'aqwzsxedc';
+        $mail->Password = 'poiuytreza';
 
         $mail->CharSet    = 'UTF-8';
         $mail->Encoding   = 'base64';

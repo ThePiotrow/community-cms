@@ -14,6 +14,9 @@ class User
 {
     public function showUsersAction()
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('user/list');
 
         $user = new UserModel();
@@ -24,6 +27,9 @@ class User
 
     public function updateUserAction($id)
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('user/profile');
         $User = new UserModel();
         $error = false;
@@ -206,6 +212,9 @@ class User
 
     public function deleteUserAction($id)
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('user/delete');
         $error = false;
         $User = new UserModel();

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Core\Helpers;
+use App\Core\Auth;
 use App\Core\FormValidator;
 
 use App\Models\Page as PageModel;
@@ -12,6 +13,9 @@ class Page
 {
     public function showPagesAction()
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('page/list');
 
         $Page = new PageModel();
@@ -43,6 +47,9 @@ class Page
 
     public function updatePageAction($id)
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('page/edit');
         $Page = new PageModel();
         $error = false;
@@ -83,6 +90,9 @@ class Page
 
     public function createPageAction()
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('page/create');
         $Page = new PageModel();
         $error = false;
@@ -117,6 +127,9 @@ class Page
 
     public function deletePageAction($id)
     {
+        if (!Auth::isAuth())
+            Helpers::redirect('/login');
+
         $view = new View('page/delete');
         $error = false;
         $Page = new PageModel();

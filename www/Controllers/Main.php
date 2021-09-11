@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Models\Page as PageModel;
 
 class Main
 {
@@ -11,6 +12,11 @@ class Main
     public function homeAction()
     {
         $view = new View('home');
+
+        $Page = new PageModel();
+        $pages = $Page->selectAll();
+
+        $view->assign('pages', $pages);
     }
 
     //Method : Action
