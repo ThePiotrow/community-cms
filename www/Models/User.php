@@ -84,9 +84,9 @@ class User extends Database
         return $this->status;
     }
 
-    public function setVerificationCode()
+    public function setVerificationCode($reset = false)
     {
-        $this->verificationCode = md5($this->getFirstname() . $this->getLastname() . $this->getEmail() . uniqid());
+        $this->verificationCode = $reset ? NULL : md5($this->getEmail() . $this->getPassword() . uniqid());
     }
 
     public function getVerificationCode()
@@ -108,13 +108,17 @@ class User extends Database
                     "type" => "text",
                     "label" => "Prénom",
                     "class" => "form-input",
-                    "required" => true
+                    "required" => true,
+                    "minLength" => 2,
+                    "error" => "Le prénom doit contenir minimum 2"
                 ],
                 "lastname" => [
                     "type" => "text",
                     "label" => "Nom",
                     "class" => "form-input",
-                    "required" => true
+                    "required" => true,
+                    "minLength" => 2,
+                    "error" => "Le nom doit contenir minimum 2"
                 ],
                 "email" => [
                     "type" => "email",
@@ -126,7 +130,9 @@ class User extends Database
                     "type" => "password",
                     "label" => "Mot de passe",
                     "class" => "form-input",
-                    "required" => true
+                    "required" => true,
+                    "minLength" => 8,
+                    "error" => "Le mot de passe doit contenir minimum 8 caractères"
                 ]
             ]
         ];
@@ -163,7 +169,7 @@ class User extends Database
         return [
             "config" => [
                 "method" => "POST",
-                "action" => "/forgot",
+                "action" => "",
                 "id" => "forgot-form",
                 "submit" => "Envoyer un mail de réinitialisation"
             ],
@@ -173,6 +179,28 @@ class User extends Database
                     "label" => "Adresse mail",
                     "class" => "form-input",
                     "required" => true
+                ]
+            ]
+        ];
+    }
+
+    public function resetPasswordForm()
+    {
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "forgot-form",
+                "submit" => "Modifier le mot de passe"
+            ],
+            "inputs" => [
+                "password" => [
+                    "type" => "password",
+                    "label" => "Nouveau mot de passe",
+                    "class" => "form-input",
+                    "required" => true,
+                    "minLength" => 8,
+                    "error" => "Le mot de passe doit contenir minimum 8 caractères"
                 ]
             ]
         ];
@@ -211,14 +239,18 @@ class User extends Database
                     "label" => "Prénom",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['firstname'] ?? ""
+                    "value" => $data['firstname'] ?? "",
+                    "minLength" => 2,
+                    "error" => "Le prénom doit contenir minimum 2"
                 ],
                 "lastname" => [
                     "type" => "text",
                     "label" => "Nom",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['lastname'] ?? ""
+                    "value" => $data['lastname'] ?? "",
+                    "minLength" => 2,
+                    "error" => "Le nom doit contenir minimum 2"
                 ],
                 "email" => [
                     "type" => "email",
@@ -232,7 +264,9 @@ class User extends Database
                     "label" => "Mot de passe",
                     "class" => "form-input",
                     "required" => true,
-                    "value" => $data['password'] ?? ""
+                    "value" => $data['password'] ?? "",
+                    "minLength" => 8,
+                    "error" => "Le mot de passe doit contenir minimum 8 caractères"
                 ],
                 "status" => [
                     "type" => "checkbox",

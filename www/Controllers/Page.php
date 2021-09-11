@@ -92,6 +92,8 @@ class Page
             $inputsError = FormValidator::check($Page->addPageForm(), $_POST);
             Helpers::convertToGoodData($_POST, Helpers::allowedTags());
 
+            var_dump($inputsError);
+
             if (!count($inputsError))
 
                 if (!($Page->search('url', $_POST['url']))) {

@@ -14,6 +14,8 @@ class FormBuilder
 				id='" . ($config["config"]["id"] ?? "") . "'
 				>";
 
+		$html .= "<input type='hidden' name='csrfToken' value='" . self::setCsrfToken() . "'>";
+
 
 		foreach ($config["inputs"] as $name => $configInput) {
 			$html .= "<label for='" . ($configInput["id"] ?? $name) . "'>" . ($configInput["label"] ?? "") . " </label><br>";
@@ -48,5 +50,16 @@ class FormBuilder
 		} else {
 			return $html;
 		}
+	}
+
+	public static function setCsrfToken()
+	{
+		if (session_status() == PHP_SESSION_NONE)
+			session_start();
+
+		$token = uniqid(uniqid());
+		$_SESSION['csrfToken'] = $token;
+
+		return $token;
 	}
 }

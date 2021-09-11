@@ -39,6 +39,11 @@
   action: checkUser
   param: verificationCode
 
+/user/resetpassword/:verificationCode:
+  controller: User
+  action: resetPassword
+  param: verificationCode
+
 /user/delete/:id:
   controller: User
   action: deleteUser

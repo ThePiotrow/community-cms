@@ -30,14 +30,15 @@ class User
         $user = $User->selectById($id);
 
         if (!empty($_POST)) {
+            Helpers::convertToGoodData($_POST);
             extract($_POST);
 
             $status = isset($status) ? 1 : 0;
 
             $User->setId($user['id']);
-            $User->setFirstname($firstname);
-            $User->setLastname($lastname);
-            $User->setEmail($email);
+            $User->setFirstname(ucfirst($firstname));
+            $User->setLastname(strtoupper($lastname));
+            $User->setEmail(strtolower($email));
             $User->setPassword($user['password'] != $password ? password_hash($password, PASSWORD_BCRYPT) : $password);
             $User->setStatus($status);
 
@@ -57,16 +58,19 @@ class User
 
     public function showRegisterAction()
     {
-        session_start();
         $User = new UserModel();
-        $error = false;
+        $errors = false;
+
+        if (Auth::isAuth())
+            Helpers::redirect('/users');
 
         if (!empty($_POST)) {
 
             Helpers::convertToGoodData($_POST);
-            $inputsError = FormValidator::check($User->registrerForm(), $_POST);
+            $errors = FormValidator::check($User->registrerForm(), $_POST);
+            FormValidator::checkEmail($_POST['email'], $errors);
 
-            if ($inputsError)
+            if (!count($errors)) {
                 if (!($User->search('email', $_POST['email']))) {
 
                     extract($_POST);
@@ -78,29 +82,18 @@ class User
                     $User->setStatus(0);
                     $User->setVerificationCode();
 
-                    if ($User->save()) {
-                        //Send mail
-                        $mail = Mailer::init(
-                            ["address" => "no-reply@community-cms.com", "name" => "Community CMS"],
-                            [["address" => $User->getEmail(), "name" => $User->getFullName()]],
-                            "Vérifiez votre adresse mail",
-                            "<a href='" . HOST_ADDRESS . "/user/check/" . $User->getVerificationCode() . "'>Cliquez ici</a> pour vérifier votre adresse mail"
-                        );
-
-                        // Mailer::sendEmail(
-                        //     $mail,
-                        //     function () {
-                        //         Helpers::redirect('/');
-                        //     },
-                        //     function () use (&$User, &$id) {
-                        //         $error = "L'envoi du mail a échoué. Le compte n'a pas été créé";
-                        //         $User->deleteById($id);
-                        //     }
-                        // );
-                    }
+                    $User->save();
+                    Mailer::mail(
+                        ["address" => "no-reply@community-cms.com", "name" => "Community CMS"],
+                        ["address" => $User->getEmail(), "name" => $User->getFullName()],
+                        "Vérifiez votre adresse mail",
+                        "<a href='http://" . HOST_ADDRESS . "/user/check/" . $User->getVerificationCode() . "'>Cliquez ici</a> pour vérifier votre adresse mail"
+                    );
+                    $errors[] = "Un mail à été envoyé à " . $User->getEmail() . " avec un lien d'activation";
                 } else {
-                    $error = 'Adresse mail déjà utilisée';
+                    $errors[] = 'Adresse mail déjà utilisée';
                 }
+            }
         }
 
         $form = $User->registrerForm();
@@ -110,7 +103,7 @@ class User
         $User = new UserModel();
 
         $view->assign('form', $User->registrerForm());
-        $view->assign('error', $error);
+        $view->assign('errors', $errors);
     }
 
     public function showLoginAction()
@@ -137,8 +130,9 @@ class User
                 } else {
                     $error = "Identifiants incorrects";
                 }
-            } else
+            } else {
                 $error = "Aucun compte correspondant";
+            }
         }
 
         $view->assign('error', $error);
@@ -149,7 +143,65 @@ class User
     {
         $view = new View('user/forgot');
         $User = new UserModel();
+        $error = false;
+
+        if (!empty($_POST)) {
+            FormValidator::checkEmail($_POST['email'], $error);
+            $user = $User->search('email', $_POST['email']);
+
+            if ($user) {
+                $User->setId($user['id']);
+                $User->import($user);
+                $User->setVerificationCode();
+
+                $User->save();
+                Mailer::mail(
+                    ["address" => "no-reply@community-cms.com", "name" => "Community CMS"],
+                    ["address" => $User->getEmail(), "name" => $User->getFullName()],
+                    "Réinitialisation de mot de passe",
+                    "<a href='http://" . HOST_ADDRESS . "/user/resetpassword/" . $User->getVerificationCode() . "'>Cliquez ici</a> pour réinitialiser le mot de passe"
+                );
+                $error = "Un mail à été envoyé à " . $User->getEmail() . " avec un lien de réinitialisation";
+            } else {
+                $error = "Aucun compte correspondant";
+            }
+        }
+
         $view->assign('form', $User->forgotForm());
+        $view->assign('error', $error);
+    }
+
+    public function resetPasswordAction($verificationCode)
+    {
+        $view = new View('user/resetpassword');
+        $User = new UserModel();
+        $user = $User->search("verificationCode", $verificationCode);
+        $errors = false;
+
+        if ($user) {
+            if ($user['status'] == 1) {
+                if (!empty($_POST)) {
+                    $errors = FormValidator::check($User->resetPasswordForm(), $_POST);
+
+                    if (!count($errors)) {
+                        $User->setId($user['id']);
+                        $User->import($user);
+                        $User->setPassword(password_hash($_POST['password'], PASSWORD_BCRYPT));
+                        $User->setVerificationCode();
+                        $User->save();
+
+                        Helpers::redirect('/');
+                    }
+                }
+            } else {
+                Helpers::redirect('/user/check/' . $verificationCode);
+            }
+        } else {
+            $errors[] = "Aucun compte correspondant";
+        }
+
+        $view->assign('form', $User->resetPasswordForm());
+        $view->assign('errors', $errors);
     }
 
     public function deleteUserAction($id)
@@ -191,6 +243,7 @@ class User
             } else {
                 $User->setId($user['id']);
                 $User->setStatus(1);
+                $User->setVerificationCode(1);
                 $User->save();
             }
         } else {

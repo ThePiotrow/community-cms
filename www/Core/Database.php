@@ -19,9 +19,8 @@ class Database
 			die("Erreur SQL : " . $e->getMessage());
 		}
 
-		//  jclm_   App\Models\User -> jclm_User
 		$classExploded = explode("\\", get_called_class());
-		$this->table = strtolower(DB_PREFIXE . end($classExploded)); //jclm_User
+		$this->table = strtolower(DB_PREFIXE . end($classExploded));
 	}
 
 
@@ -58,32 +57,6 @@ class Database
 			return 1;
 		else
 			return 0;
-	}
-
-	//Fonctions CRUD 
-
-	public function createTable($table, $columns)
-	{
-		$sql = "CREATE TABLE IF NOT EXISTS " . DB_PREFIXE . $table . "(" . $columns . ")";
-
-		try {
-			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			$this->pdo->exec($sql);
-		} catch (\PDOException $e) {
-			$e->getMessage();
-		}
-	}
-
-	public function editTable($table, $columns)
-	{
-		$sql = "ALTER TABLE" . DB_PREFIXE . $table . "(" . $columns . ")";
-
-		try {
-			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			$this->pdo->exec($sql);
-		} catch (\PDOException $e) {
-			$e->getMessage();
-		}
 	}
 
 	public function selectAll()
@@ -152,22 +125,6 @@ class Database
 			$e->getMessage();
 		}
 		return 0;
-	}
-
-	public function deleteAll()
-	{
-	}
-
-	public function execute($columns = [])
-	{
-		$stmt = $this->pdo->prepare($this->query);
-
-		try {
-			$stmt->execute($columns);
-		} catch (\Exception $e) {
-			echo $e->getMessage();
-			die();
-		}
 	}
 
 	public function import($data)

@@ -7,12 +7,12 @@ use App\Core\PHPMailer\SMTP;
 
 class Mailer
 {
-    public static function init(array $from, array $to, $subject, $body, $altBody = "")
+    public static function mail(array $from, array $to, $subject, $body, $altBody = "")
     {
         $mail = new PHPMailer();
         $mail->isSMTP();
         $mail->Host = 'ssl0.ovh.net';
-        $mail->Port = 465;
+        $mail->Port = 587;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->SMTPAuth = true;
         $mail->Username = 'admin@la11eme.fr';
@@ -23,29 +23,12 @@ class Mailer
 
         $mail->setFrom($from['address'], $from['name'] ?? '');
 
-        foreach ($to as $receiver) {
-            $mail->addAddress($receiver['address'], $receiver['name'] ?? '');
-        }
+        $mail->addAddress($to['address'], $to['name'] ?? $to['address']);
 
         $mail->Subject = $subject;
         $mail->msgHTML($body);
         $mail->AltBody = $altBody;
 
         $mail->send();
-
-        return $mail;
-    }
-
-    public static function sendEmail($mailObject, $onSuccess = null, $onError = null)
-    {
-        $sent = $mailObject->send();
-
-        if ($sent) {
-            if ($onSuccess)
-                $onSuccess();
-        } else {
-            if ($onError)
-                $onError();
-        }
     }
 }

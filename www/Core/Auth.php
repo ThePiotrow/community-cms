@@ -20,6 +20,18 @@ class Auth
             $_SESSION['auth'] = $userId;
     }
 
+    public static function getConnectedUserName()
+    {
+        if (self::isAuth()) {
+
+            $User = new UserModel();
+            $user = $User->selectById($_SESSION['auth']);
+            $User->import($user);
+
+            return $User->getFullName();
+        }
+    }
+
     public static function isAuth()
     {
         if (session_status() == PHP_SESSION_NONE)
@@ -36,7 +48,6 @@ class Auth
         if (session_status() == PHP_SESSION_NONE)
             session_start();
 
-        session_unset();
         session_destroy();
         Helpers::redirect('/');
     }

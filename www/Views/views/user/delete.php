@@ -12,4 +12,3 @@ if ($error) {
 App\Core\FormBuilder::render($form);
 
 ?>
-<a href="/users">Annuler</a>
