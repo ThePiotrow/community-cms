@@ -11,12 +11,12 @@ class Mailer
     {
         $mail = new PHPMailer();
         $mail->isSMTP();
-        $mail->Host = 'ssl0.ovh.net';
-        $mail->Port = 587;
+        $mail->Host = SMTP_HOST;
+        $mail->Port = SMTP_PORT;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->SMTPAuth = true;
-        $mail->Username = 'admin@la11eme.fr';
-        $mail->Password = 'poiuytreza';
+        $mail->Username = SMTP_USER;
+        $mail->Password = SMTP_PASS;
 
         $mail->CharSet    = 'UTF-8';
         $mail->Encoding   = 'base64';

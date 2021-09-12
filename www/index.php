@@ -4,10 +4,16 @@ namespace App;
 
 use App\Core\Router;
 use App\Core\ConstantManager;
+use App\Core\Setup;
 use App\Controller\Auth;
 
 require "Autoload.php";
 Autoload::register();
+
+if (!Setup::check()) {
+    Setup::init();
+    die();
+}
 
 new ConstantManager();
 

@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Core\Helpers;
 use App\Core\View;
+use App\Core\Setup;
 use App\Models\Page as PageModel;
 
 class Main

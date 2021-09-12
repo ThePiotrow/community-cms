@@ -14,7 +14,8 @@ class FormBuilder
 				id='" . ($config["config"]["id"] ?? "") . "'
 				>";
 
-		$html .= "<input type='hidden' name='csrfToken' value='" . self::setCsrfToken() . "'>";
+		if (!isset($config["config"]["csrf"]) || $config["config"]["csrf"] != false)
+			$html .= "<input type='hidden' name='csrfToken' value='" . self::setCsrfToken() . "'>";
 
 
 		foreach ($config["inputs"] as $name => $configInput) {

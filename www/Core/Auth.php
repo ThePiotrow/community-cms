@@ -43,12 +43,13 @@ class Auth
             return 0;
     }
 
-    public static function endAuth()
+    public static function endAuth($autoRedirect = true)
     {
         if (session_status() == PHP_SESSION_NONE)
             session_start();
 
         session_destroy();
-        Helpers::redirect('/');
+        if ($autoRedirect)
+            Helpers::redirect('/');
     }
 }

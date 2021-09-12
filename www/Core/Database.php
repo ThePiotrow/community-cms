@@ -20,7 +20,7 @@ class Database
 		}
 
 		$classExploded = explode("\\", get_called_class());
-		$this->table = strtolower(DB_PREFIXE . end($classExploded));
+		$this->table = strtolower(end($classExploded));
 	}
 
 
@@ -138,5 +138,17 @@ class Database
 			$setter = 'set' . ucfirst($key);
 			$this->$setter($data[$key]);
 		}
+	}
+
+	public function seed()
+	{
+		$sqlArray = explode(';\r', file_get_contents('Core/sql/default.sql'));
+		$success = false;
+		foreach ($sqlArray as $sql) {
+			$stmt = $this->pdo->prepare($sql);
+			if (!$stmt->execute())
+				$success = false;
+		}
+		return $success;
 	}
 }
