@@ -101,8 +101,10 @@ class Page
 
             $inputsError = FormValidator::check($Page->addPageForm(), $_POST);
             Helpers::convertToGoodData($_POST, Helpers::allowedTags());
+            $url = Helpers::convertForSlug($_POST['url']);
 
-            var_dump($inputsError);
+            echo $url;
+            die();
 
             if (!count($inputsError))
 

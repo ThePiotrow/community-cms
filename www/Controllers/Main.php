@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
 use App\Core\View;
 use App\Models\Page as PageModel;
 

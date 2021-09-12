@@ -36,4 +36,13 @@ class Helpers
 	{
 		return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'ul', 'ol', 'li', 'img'];
 	}
+
+	public static function convertForSlug($slug)
+	{
+		$slug = strtolower($slug);
+		$slug = preg_replace("~[^\w]+~u", '-', $slug);
+		$slug = preg_replace("~-+~", '-', $slug);
+		$slug = trim($slug, '-');
+		return $slug;
+	}
 }
