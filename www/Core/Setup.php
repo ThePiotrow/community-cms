@@ -33,7 +33,7 @@ class Setup
                 $db = new Database();
 
                 if ($db->seed()) {
-                    Helpers::redirect('/');
+                    Helpers::redirect('/register');
                 } else {
                     $error = "Une erreur est survenue lors de la création des tables de la BDD";
                     unlink('.env');

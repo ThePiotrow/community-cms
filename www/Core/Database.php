@@ -147,8 +147,8 @@ class Database
 		foreach ($sqlArray as $sql) {
 			$stmt = $this->pdo->prepare($sql);
 			if (!$stmt->execute())
-				$success = false;
+				return false;
 		}
-		return $success;
+		Helpers::redirect('/');
 	}
 }
