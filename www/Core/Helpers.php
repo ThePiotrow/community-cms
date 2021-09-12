@@ -11,8 +11,9 @@ class Helpers
 		return ucwords(mb_strtolower(trim($firstname)));
 	}
 
-	public static function troncate($string, $length)
+	public static function preview($string, $length)
 	{
+		$string = strip_tags($string);
 		if (strlen($string) > $length)
 			return substr($string, 0, $length) . " ...";
 		else

@@ -23,7 +23,7 @@ class Page
         $pages = $Page->selectAll();
 
         foreach ($pages as $index => $page) {
-            $pages[$index]['content'] = Helpers::troncate(strip_tags($page['content']), 20);
+            $pages[$index]['content'] = Helpers::preview(strip_tags($page['content']), 20);
         }
 
         $view->assign('pages', $pages);
